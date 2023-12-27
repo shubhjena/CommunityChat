@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useCallback, useContext, useEffect } from "react";
 import { io, Socket } from "socket.io-client";
+import shortid from 'shortid';
 
 interface SocketProviderProps {
   children?: React.ReactNode;
@@ -8,12 +9,14 @@ interface SocketProviderProps {
 
 interface Message {
   text: string;
-  sender: "user" | "bot";
+  sender: string;
+  sendTime: Date;
 }
 
 interface ISocketContext {
   sendMessage: (msg: Message) => any;
   messages: Message[];
+  userId: string;
 }
 
 // context for socket
@@ -29,6 +32,12 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const [socket, setSocket] = useState<Socket>();
   const [messages, setMessages] = useState<Message[]>([]);
 
+  const userId = localStorage.getItem('userId') || shortid.generate(); // Retrieve or generate user ID
+
+  useEffect(() => {
+    localStorage.setItem('userId', userId); // Save the user ID to local storage
+  }, [userId]);
+
   const sendMessage: ISocketContext["sendMessage"] = useCallback(
     (msg) => {
       console.log("Send message", msg);
@@ -40,7 +49,6 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   );
 
   const onMessageRec = useCallback((msg: string) => {
-    console.log("From Server Msg Rec", msg);
     const { message } = JSON.parse(msg) as { message: Message };
     console.log("Parsed From Server Msg Rec", message);
 
@@ -59,7 +67,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     };
   }, []);
   return (
-    <SocketContext.Provider value={{ sendMessage, messages }}>
+    <SocketContext.Provider value={{ sendMessage, messages, userId }}>
       {children}
     </SocketContext.Provider>
   );
