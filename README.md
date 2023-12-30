@@ -1,81 +1,76 @@
-# Turborepo starter
+# Community Chat App
 
-This is an official starter Turborepo.
+Welcome to the Community Chat App! This application enables real-time chat over a browser window, where users interact with anonymous usernames. The app tracks the message history and associated timestamp of the messages.
 
-## Using this example
+"Community Chat" is a personal project that I've used to understand the concept of websockets. Along with websockets I also learned to use of redis and kafkajs in through this project.
+## Features
 
-Run the following command:
+- **Real-time Communication**: Enjoy instant messaging with other community members.
+- **Anonymous Usernames**: Users are assigned anonymous usernames for privacy.
+- **Timestamps**: Every message is accompanied by a timestamp for reference.
+- **Technologies**: Built with TurboRepo, Next.js, Node.js, Redis, PostgreSQL, and Kafka.
 
-```sh
-npx create-turbo@latest
-```
+## Getting Started
 
-## What's inside?
+1. Clone the repository to your local machine:
 
-This Turborepo includes the following packages/apps:
+    ```bash
+    git clone https://github.com/shubhjena/chat-app.git
+    ```
 
-### Apps and Packages
+2. Navigate to the project directory:
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+    ```bash
+    cd chat-app
+    ```
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+3. Install dependencies:
 
-### Utilities
+    ```bash
+    yarn install
+    ```
 
-This Turborepo has some additional tools already setup for you:
+4. Set up the required environment variables:
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+    ```bash
+    cp .env.example .env
+    ```
 
-### Build
+    Replace placeholder values in the `.env` file with your configuration.
 
-To build all apps and packages, run the following command:
+5. Start the application:
 
-```
-cd my-turborepo
-pnpm build
-```
+    ```bash
+    yarn dev
+    ```
 
-### Develop
+6. Open the app in your web browser.
 
-To develop all apps and packages, run the following command:
+## Technologies Used
 
-```
-cd my-turborepo
-pnpm dev
-```
+- TurboRepo
+- Next.js
+- Node.js
+- Redis
+- PostgreSQL
+- Kafka
 
-### Remote Caching
+## Database Setup
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+This app uses Redis and PostgreSQL for data storage. Ensure you have these databases configured and the connection details updated in the `.env` file.
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
+## Kafka Configuration
 
-```
-cd my-turborepo
-npx turbo login
-```
+Kafka is used for real-time event streaming. Set up your Kafka configuration in the `.env` file.
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+## Contributing
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+I welcome contributions from the community! If you'd like to contribute to the development of this chat app, feel free to create a pull request. Your input is valuable, and I look forward to collaborating on making this app even better. Feel free to share your ideas and improvements!
 
-```
-npx turbo link
-```
+## License
 
-## Useful Links
+This project is licensed under the MIT License - see the [LICENSE](https://opensource.org/license/mit/) file for details.
 
-Learn more about the power of Turborepo:
+---
 
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+Thank you for using our Community Chat App! If you have any questions or encounter issues, feel free to open an [issue](https://github.com/shubhjena/chat-app/issues). Happy chatting!
