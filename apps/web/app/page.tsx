@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSocket } from "../context/SocketProvider";
 import Message from "../components/Message";
+import { isUndefined } from "util";
 
 // Function to format the date
 const formatDate = (date: Date): string => {
@@ -17,6 +18,11 @@ const formatDate = (date: Date): string => {
 // Function to check if two dates are on the same day
 const isSameDay = (date1: Date, date2: Date): boolean => {
   return date1.toDateString() === date2.toDateString();
+};
+
+// Function to check if two dates are on the same day
+const isSameId = (user1: string, user2: string): boolean => {
+  return user1 === user2;
 };
 
 export default function Page() {
@@ -58,8 +64,8 @@ export default function Page() {
           <div key={index} className="flex flex-col">
             {index === 0 ||
             !isSameDay(
-              new Date(messages[index - 1].sendTime),
-              new Date(message.sendTime)
+              new Date(message.sendTime),
+              new Date(messages[index - 1].sendTime)
             ) ? (
               // Display date if it's a new day
               <p className="mx-auto text-center text-xxs text-gray-400 mt-2 mb-1.5 bg-zinc-900 p-1 px-2 rounded-md bg-opacity-75 shadow">
@@ -67,7 +73,11 @@ export default function Page() {
               </p>
             ) : null}
             {/* Render individual message */}
-            <Message key={index} message={message} userId={userId} />
+            {index === 0 || !isSameId(message.sender, messages[index - 1].sender) ? (
+              <Message key={index} message={message} userId={userId} sameId={false}/>
+            ) : (
+              <Message key={index} message={message} userId={userId} sameId={true}/>
+            )}
           </div>
         ))}
         <div className={messages.length === 0 ? "block" : "hidden"}>

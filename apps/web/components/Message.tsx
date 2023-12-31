@@ -5,7 +5,10 @@ interface Message {
   sender: string;
   sendTime: Date;
 }
-
+const style = {
+  sender: "rounded-se-none",
+  receiver: "rounded-ss-none",
+};
 // Function to format the time
 const formatTime = (date: Date | string): string => {
   if (!date) return "";
@@ -19,25 +22,35 @@ const formatTime = (date: Date | string): string => {
 };
 
 // Component to render individual messages
-const Message = ({ message, userId }: { message: Message; userId: string }) => (
-  <div className={message.sender === userId ? "ml-auto" : "mr-auto"}>
-    <div
-      className={`pt-2 pb-1 px-5 max-w-md text-white inline-block rounded-2xl mb-1.5 ${
-        message.sender === userId ? "bg-blue-500" : "bg-slate-500"
+const Message = ({
+  message,
+  userId,
+  sameId,
+}: {
+  message: Message;
+  userId: string;
+  sameId: boolean;
+}) => (
+  <div
+    className={`flex flex-col pt-2 pb-1 px-5 max-w-md text-white rounded-xl mb-0.5 ${
+      message.sender === userId ? "ml-auto" : "mr-auto"
+    } ${
+      message.sender === userId
+        ? "bg-blue-500 rounded-se-none"
+        : "bg-slate-500 rounded-ss-none"
+    } ${sameId ? "rounded-se-xl rounded-ss-xl" : " mt-1"}`}
+  >
+    <p
+      className={`text-xxs font-bold ${
+        message.sender === userId || sameId ? "hidden" : "block"
       }`}
     >
-      <p
-        className={`text-xxs font-bold ${
-          message.sender === userId ? "hidden" : "block"
-        }`}
-      >
-        {message.sender}
-      </p>
-      <p className="text-lg">{message.text}</p>
-      <p className="text-xxs text-right text-gray-300">
-        {formatTime(message.sendTime)}
-      </p>
-    </div>
+      {message.sender}
+    </p>
+    <p className="text-md break-words">{message.text}</p>
+    <p className="text-xxs text-right text-gray-300">
+      {formatTime(message.sendTime)}
+    </p>
   </div>
 );
 
