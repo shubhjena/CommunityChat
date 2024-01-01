@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSocket } from "../context/SocketProvider";
 import Message from "../components/Message";
-import { isUndefined } from "util";
 
 // Function to format the date
 const formatDate = (date: Date): string => {
