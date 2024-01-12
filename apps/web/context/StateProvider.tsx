@@ -1,3 +1,4 @@
+'use client'
 import React, {createContext, useReducer, useContext, Dispatch } from 'react'
 import { Socket } from 'socket.io-client';
 import { initialState, reducer } from './StateReducers';

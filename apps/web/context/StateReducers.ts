@@ -18,7 +18,10 @@ export const reducer = (state: State, action: Action): State => {
         case 'SET_MESSAGES':
         return { ...state, messages: action.payload };
       case 'ADD_MESSAGE':
-        return { ...state, messages: [...state.messages, action.payload] };
+        if(state.selectedChat === action.payload.chatId){
+          return {
+            ...state, messages: [...state.messages, action.payload] };
+        };
       default:
         return state;
     }
