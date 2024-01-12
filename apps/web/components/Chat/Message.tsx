@@ -4,6 +4,7 @@ interface Message {
   text: string;
   sender: string;
   sendTime: Date;
+  chatId: String;
 }
 const style = {
   sender: "rounded-se-none",
@@ -32,13 +33,13 @@ const Message = ({
   sameId: boolean;
 }) => (
   <div
-    className={`flex flex-col pt-2 pb-1 px-5 max-w-md text-white rounded-xl mb-0.5 ${
+    className={`flex flex-col pt-2 pb-1 px-5 max-w-md text-white rounded-2xl mb-0.5 ${
       message.sender === userId ? "ml-auto" : "mr-auto"
     } ${
       message.sender === userId
         ? "bg-blue-500 rounded-se-none"
         : "bg-slate-500 rounded-ss-none"
-    } ${sameId ? "rounded-se-xl rounded-ss-xl" : " mt-1"}`}
+    } ${sameId ? "rounded-se-2xl rounded-ss-2xl" : " mt-1"}`}
   >
     <p
       className={`text-xxs font-bold ${
