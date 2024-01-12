@@ -1,23 +1,36 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { AiOutlineSend } from "react-icons/ai";
 import { useStateProvider } from "../../context/StateProvider";
-import { useSocket } from "../../context/SocketProvider";
+import { io } from "socket.io-client";
+
+export interface Message {
+  text: string;
+  sender: string;
+  sendTime: Date;
+  chatId: string;
+}
 
 export default function MessageBox() {
-  const { sendMessage } = useSocket();
-  const [{ selectedChat, userId }] = useStateProvider();
+  const [{ selectedChat, userId, socket }, dispatch] = useStateProvider();
   const [input, setInput] = useState("");
+
+  const onMessageRec = useCallback((msg: string) => {
+    const { message } = JSON.parse(msg) as { message: Message };
+    dispatch({ type: "ADD_MESSAGE", payload: message });
+  }, []);
 
   // Function to handle sending a message
   const handleSendMessage = () => {
-    if (input.trim() !== "") {
-      sendMessage({
+    if (input.trim() !== "" && socket) {
+      const newMessage: Message = {
         text: input,
         sender: userId,
         sendTime: new Date(),
         chatId: selectedChat,
-      });
-      setInput(""); // Reset the input after sending the message
+      };
+      console.log(selectedChat)
+      socket.emit("event:message", { message: newMessage });
+      setInput("");
     }
   };
 
@@ -29,8 +42,25 @@ export default function MessageBox() {
     }
   };
 
+  useEffect(() => {
+    //listen to backend for new messages
+    const _socket = io("http://localhost:8000");
+    _socket.on("message", onMessageRec);
+    dispatch({ type: "SET_SOCKET", payload: _socket });
+
+    return () => {
+      _socket.off("message", onMessageRec);
+      _socket.disconnect();
+      dispatch({ type: "SET_SOCKET", payload: undefined });
+    };
+  }, [onMessageRec]);
+
+  useEffect(() => {
+    setInput("");
+  }, [selectedChat]);
+
   return (
-    <div className="items-center fixed bottom-8 w-8/12">
+    <div className="items-center relative bottom-0 pt-0.5">
       <div className="flex bg-zinc-950 border border-gray-500 w-full rounded-2xl">
         <input
           type="text"

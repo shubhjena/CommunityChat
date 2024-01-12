@@ -1,15 +1,6 @@
 import React from "react";
+import { Message } from "./MessageBox";
 
-interface Message {
-  text: string;
-  sender: string;
-  sendTime: Date;
-  chatId: String;
-}
-const style = {
-  sender: "rounded-se-none",
-  receiver: "rounded-ss-none",
-};
 // Function to format the time
 const formatTime = (date: Date | string): string => {
   if (!date) return "";
@@ -33,13 +24,11 @@ const Message = ({
   sameId: boolean;
 }) => (
   <div
-    className={`flex flex-col pt-2 pb-1 px-5 max-w-md text-white rounded-2xl mb-0.5 ${
-      message.sender === userId ? "ml-auto" : "mr-auto"
-    } ${
+    className={`flex flex-col pt-2 pb-1 px-5 max-w-md text-white mb-0.5 rounded-2xl ${
       message.sender === userId
-        ? "bg-blue-500 rounded-se-none"
-        : "bg-slate-500 rounded-ss-none"
-    } ${sameId ? "rounded-se-2xl rounded-ss-2xl" : " mt-1"}`}
+        ? `bg-blue-500 ml-auto ${sameId ? "" : "rounded-se"}`
+        : `bg-slate-500 mr-auto ${sameId ? "" : "rounded-ss"}`
+    } ${sameId ? "" : "mt-1"} `}
   >
     <p
       className={`text-xxs font-bold ${

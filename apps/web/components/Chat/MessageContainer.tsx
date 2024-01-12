@@ -2,8 +2,8 @@ import React, { useEffect, useRef } from "react";
 import { useStateProvider } from "../../context/StateProvider";
 import Message from "./Message";
 
-export default function ChatContainer() {
-  const [{ messages, userId, selectedChat }] = useStateProvider();
+export default function MessageContainer() {
+  const [{ messages, userId }] = useStateProvider();
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
   // Function to format the date
@@ -18,7 +18,8 @@ export default function ChatContainer() {
   };
 
   // Function to check if two dates are on the same day
-  const isSameDay = (date1: Date, date2: Date): boolean => {
+  const isSameDay = (date1: Date, date2: Date | undefined): boolean => {
+    if (!date2) return false;
     return date1.toDateString() === date2.toDateString();
   };
 
@@ -37,41 +38,40 @@ export default function ChatContainer() {
 
   return (
     <div
-      className="overflow-y-auto pt-4 px-4 flex flex-col custom-scrollbar"
+      className="overflow-y-auto pt-4 px-4 flex-1 flex flex-col custom-scrollbar"
       ref={messagesContainerRef}
     >
-      {messages
-        .map((message, index) => (
-          <div key={index} className="flex flex-col">
-            {index === 0 ||
-            !isSameDay(
-              new Date(message.sendTime),
-              new Date(messages[index - 1].sendTime)
-            ) ? (
-              // Display date if it's a new day
-              <p className="mx-auto text-center text-xxs text-gray-400 mt-2 mb-1.5 bg-zinc-700 p-1 px-2 rounded-md bg-opacity-75 shadow">
-                {formatDate(new Date(message.sendTime))}
-              </p>
-            ) : null}
-            {/* Render individual message */}
-            {index === 0 ||
-            !isSameId(message.sender, messages[index - 1].sender) ? (
-              <Message
-                key={index}
-                message={message}
-                userId={userId}
-                sameId={false}
-              />
-            ) : (
-              <Message
-                key={index}
-                message={message}
-                userId={userId}
-                sameId={true}
-              />
-            )}
-          </div>
-        ))}
+      {messages.map((message, index) => (
+        <div key={index} className="flex flex-col">
+          {index === 0 ||
+          !isSameDay(
+            new Date(message.sendTime),
+            new Date(messages[index - 1]?.sendTime || "")
+          ) ? (
+            // Display date if it's a new day
+            <p className="mx-auto text-center text-xxs text-gray-400 mt-2 mb-1.5 bg-zinc-700 p-1 px-2 rounded-md bg-opacity-75 shadow">
+              {formatDate(new Date(message.sendTime))}
+            </p>
+          ) : null}
+          {/* Render individual message */}
+          {index === 0 ||
+          !isSameId(message.sender, messages[index - 1]?.sender || "") ? (
+            <Message
+              key={index}
+              message={message}
+              userId={userId}
+              sameId={false}
+            />
+          ) : (
+            <Message
+              key={index}
+              message={message}
+              userId={userId}
+              sameId={true}
+            />
+          )}
+        </div>
+      ))}
       {messages.length === 0 && (
         <div
           className={`flex-1 flex flex-col items-center justify-center gap-0.5 w-full text-gray-300`}
