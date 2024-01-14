@@ -38,7 +38,15 @@ function requestHandler(req: IncomingMessage, res: ServerResponse) {
 
 async function handleGetMessages(req: IncomingMessage, res: ServerResponse) {
     try {
-        const messages = await prismaClient.message.findMany();
+        const chatId = req.url?.split('=')[1]; // Extract chatId from query parameters
+        const messages = await prismaClient.message.findMany({
+            where: {
+            chatId: chatId || "Chat 1", // Default to "Chat 1" if chatId is not provided
+            },
+            orderBy:{
+                createdAt: "asc"
+            }
+        });
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(messages));
         console.log('Message sent');
