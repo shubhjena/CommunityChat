@@ -41,11 +41,15 @@ export async function startMessageConsumer() {
         autoCommit: true,
         eachMessage: async ({message, pause}) => {
             if (!message.value) return;
-            console.log('New message recv...');
             try{
+                const messageData = JSON.parse(message.value.toString());
+                console.log('~~~~~~~~~~Displaying message data~~~~~~~~~~~~~~~\n: ',messageData.message.chatId,'\n~~~~~~~~~~~~~~~~END~~~~~~~~~~~~~~~~');
                 await prismaClient.message.create({
                     data:{
-                        text: message.value?.toString(),
+                        text: messageData.message.text, 
+                        sender: messageData.message.sender,
+                        createdAt: new Date(messageData.message.sendTime),
+                        chatId : messageData.message.chatId,
                     },
                 })
             } catch(err){
