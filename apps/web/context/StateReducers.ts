@@ -22,6 +22,7 @@ export const reducer = (state: State, action: Action): State => {
           return {
             ...state, messages: [...state.messages, action.payload] };
         };
+        return state;
       default:
         return state;
     }
